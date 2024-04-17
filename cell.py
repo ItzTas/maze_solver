@@ -30,5 +30,14 @@ class Cell():
             line = Line(Point(x1, y2), Point(x2, y2))
             self._win.draw_line(line)
             
-    def draw_move(self) -> None:
-        pass
+    def draw_move(self, to_cell, undo=False) -> None:
+        fill_color = "gray"
+        center_x = (self._x1 + self._x2) / 2
+        center_y = (self._y1 + self._y2) / 2
+        
+        center_x_other = (to_cell._x1 + to_cell._x2) / 2
+        center_y_other = (to_cell._y1 + to_cell._y2) / 2
+        if undo == False:
+            fill_color = "red"
+        connection = Line(Point(center_x, center_y), Point(center_x_other, center_y_other))
+        self._win.draw_line(connection, fill_color)
