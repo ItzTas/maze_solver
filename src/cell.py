@@ -1,61 +1,63 @@
 from graphics import Line, Point
 
-class Cell():
-    def __init__(self, win=None, visited=False) -> None:        
+
+class Cell:
+    def __init__(self, win=None):
         self.has_left_wall = True
         self.has_right_wall = True
         self.has_top_wall = True
         self.has_bottom_wall = True
+        self.visited = False
         self._x1 = None
         self._x2 = None
         self._y1 = None
         self._y2 = None
         self._win = win
-        self.visited = False
 
-    def draw(self, x1, y1, x2, y2) -> None:
+    def draw(self, x1, y1, x2, y2):
+        if self._win is None:
+            return
         self._x1 = x1
         self._x2 = x2
         self._y1 = y1
         self._y2 = y2
-        white_fill = "white"
         if self.has_left_wall:
             line = Line(Point(x1, y1), Point(x1, y2))
             self._win.draw_line(line)
         else:
             line = Line(Point(x1, y1), Point(x1, y2))
-            self._win.draw_line(line, white_fill)
-            
+            self._win.draw_line(line, "white")
         if self.has_top_wall:
             line = Line(Point(x1, y1), Point(x2, y1))
             self._win.draw_line(line)
         else:
             line = Line(Point(x1, y1), Point(x2, y1))
-            self._win.draw_line(line, white_fill)
-            
+            self._win.draw_line(line, "white")
         if self.has_right_wall:
             line = Line(Point(x2, y1), Point(x2, y2))
             self._win.draw_line(line)
         else:
             line = Line(Point(x2, y1), Point(x2, y2))
-            self._win.draw_line(line, white_fill)
-            
+            self._win.draw_line(line, "white")
         if self.has_bottom_wall:
             line = Line(Point(x1, y2), Point(x2, y2))
             self._win.draw_line(line)
         else:
             line = Line(Point(x1, y2), Point(x2, y2))
-            self._win.draw_line(line, white_fill)
-            
-    def draw_move(self, to_cell, undo=False) -> None:
-        fill_color = "gray"
-        center_x = (self._x1 + self._x2) / 2
-        center_y = (self._y1 + self._y2) / 2
-        
-        center_x_other = (to_cell._x1 + to_cell._x2) / 2
-        center_y_other = (to_cell._y1 + to_cell._y2) / 2
-        if undo == False:
-            fill_color = "red"
-        connection = Line(Point(center_x, center_y), Point(center_x_other, center_y_other))
-        self._win.draw_line(connection, fill_color)
-    
+            self._win.draw_line(line, "white")
+
+    def draw_move(self, to_cell, undo=False):
+        half_length = abs(self._x2 - self._x1) // 2
+        x_center = half_length + self._x1
+        y_center = half_length + self._y1
+
+        half_length2 = abs(to_cell._x2 - to_cell._x1) // 2
+        x_center2 = half_length2 + to_cell._x1
+        y_center2 = half_length2 + to_cell._y1
+
+        fill_color = "red"
+        if undo:
+            fill_color = "gray"
+
+        line = Line(Point(x_center, y_center), Point(x_center2, y_center2))
+        self._win.draw_line(line, fill_color)
